@@ -2,6 +2,7 @@
 import re
 import copy
 import itertools
+import networkx as nx
 
 EXTRACT_UIDS_RGX = '^[^\t]+\t[^\t]+\tuniprotkb:[^_]+_(?P<UIDA>[^\(]+)\(shortlabel\)\tuniprotkb:[^_]+_(?P<UIDB>[^\(]+)\(shortlabel\)\t'
 EXTRACT_GENE_RGX = '^(?P<UID>.+)$'
@@ -36,6 +37,13 @@ while 1:
 in_fptr.close()
 
 PanCancerGenePairs = [gene_pair for gene_pair in GeneAdjMatrix if gene_pair[0] in GeneSubset and gene_pair[1] in GeneSubset]
+
+G = nx.Graph()
+for pair in PanCancerGenePairs:
+    G.add_edge(pair[0],pair[1])
+
+nx.write_graphml(G,"/Users/joshuaburkhart/tmp/G.xml")
+exit()
 
 print("Calculate Degree Centrality...")
 GeneDegrees = dict()
