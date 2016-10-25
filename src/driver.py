@@ -1,7 +1,7 @@
 
 import re
 import networkx as nx
-import pickle
+import json
 
 EXTRACT_UIDS_RGX = '^[^\t]+\t[^\t]+\tuniprotkb:[^_]+_(?P<UIDA>[^\(]+)\(shortlabel\)\tuniprotkb:[^_]+_(?P<UIDB>[^\(]+)\(shortlabel\)\t'
 EXTRACT_GENE_RGX = '^(?P<UID>.+)$'
@@ -44,23 +44,23 @@ for pair in PanCancerGenePairs:
 nx.write_graphml(G,"/Users/joshuaburkhart/tmp/G.xml")
 
 print("Calculate Degree Centrality...")
-output = open("/Users/joshuaburkhart/tmp/degree_centrality_G.pkl", 'wb')
-pickle.dump(nx.degree_centrality(G), output)
+output = open("/Users/joshuaburkhart/tmp/degree_centrality_G.json", 'w')
+json.dump(nx.degree_centrality(G), output)
 output.close()
 
 print("Calculate Eigenvector Centrality...")
-output = open("/Users/joshuaburkhart/tmp/eigenvector_centrality_G.pkl", 'wb')
-pickle.dump(nx.eigenvector_centrality(G), output)
+output = open("/Users/joshuaburkhart/tmp/eigenvector_centrality_G.json", 'w')
+json.dump(nx.eigenvector_centrality(G), output)
 output.close()
 
 print("Calculate Katz Centrality...")
-output = open("/Users/joshuaburkhart/tmp/katz_centrality_G.pkl", 'wb')
-pickle.dump(nx.katz_centrality(G,alpha=0.03,max_iter=10000), output)
+output = open("/Users/joshuaburkhart/tmp/katz_centrality_G.json", 'w')
+json.dump(nx.katz_centrality(G,alpha=0.03,max_iter=10000), output)
 output.close()
 
 print("Calculate PageRank Centrality...")
-output = open("/Users/joshuaburkhart/tmp/pagerank_centrality_G.pkl", 'wb')
-pickle.dump(nx.pagerank(G), output)
+output = open("/Users/joshuaburkhart/tmp/pagerank_centrality_G.json", 'w')
+json.dump(nx.pagerank(G), output)
 output.close()
 
 print("Done.")
