@@ -1,0 +1,118 @@
+Discovered 8 components
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	B4GALT3
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	SPOP
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	IDH2
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	POLQ
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	FLT3
+
+Unique component of size 1
+ diameter 0
+ avg shortest path 0.0
+	IDH1
+
+Unique component of size 2
+ diameter 1
+ avg shortest path 0.5
+	EPHA3
+	EPHB6
+
+Unique component of size 76
+ diameter 9
+ avg shortest path 3.512465373961219
+	ACVR1B
+	ACVR2A
+	AJUBA
+	AKT1
+	APC
+	ARHGAP35
+	ASXL1
+	ATM
+	ATR
+	AXIN2
+	BAP1
+	BRAF
+	BRCA1
+	BRCA2
+	CCND1
+	CDH1
+	CDK12
+	CDKN1A
+	CDKN1B
+	CDKN2A
+	CDKN2C
+	CEBPA
+	CHEK2
+	CTCF
+	CTNNB1
+	DNMT3A
+	EGFR
+	EIF4A2
+	EP300
+	ERBB4
+	ERCC2
+	EZH2
+	FBXW7
+	FGFR2
+	FGFR3
+	HGF
+	KDM6A
+	KIT
+	KRAS
+	LRRK2
+	MAP2K4
+	MAP3K1
+	MTOR
+	NCOR1
+	NF1
+	NOTCH1
+	NRAS
+	PCBP1
+	PDGFRA
+	PIK3CA
+	PIK3CG
+	PIK3R1
+	PPP2R1A
+	PTEN
+	PTPN11
+	RAD21
+	RB1
+	RPL22
+	RPL5
+	SF3B1
+	SIN3A
+	SMAD2
+	SMAD4
+	SMC1A
+	SMC3
+	SOX17
+	SOX9
+	STAG2
+	STK11
+	TAF1
+	TBL1XR1
+	TGFBR2
+	TLR4
+	TP53
+	U2AF1
+	USP9X
+
