@@ -168,7 +168,6 @@ nx.write_graphml(pcircle0,"/home/burkhart/Software/NetworkScienceAndBiology/outp
 n_cancer = 76
 l_cancer = 3.512465373961219
 c_cancer = 5.394736842105263
-p_cancer = 0.5 # to position value in center
 
 # 2. generate small-world (sw) models with n_sw == n_cancer, c_sw bounding c_cancer, varying p_sw
 n_sw = n_cancer
@@ -192,7 +191,8 @@ for c_sw in range(5,7):
 with open("/home/burkhart/Software/NetworkScienceAndBiology/output/l_v_p.csv",'w') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['c','l','p'])
-    csv_out.writerow([c_cancer,l_cancer,p_cancer])
+    for p_cancer in np.arange(0,1,0.1):
+        csv_out.writerow([c_cancer,l_cancer,p_cancer])
     for c_sw_idx in range(len(c_sw_list)):
         for l_sw_idx in range(len(c_sw_list[c_sw_idx])):
             c = c_sw_list[c_sw_idx][l_sw_idx][0]
@@ -204,7 +204,8 @@ with open("/home/burkhart/Software/NetworkScienceAndBiology/output/l_v_p.csv",'w
 with open("/home/burkhart/Software/NetworkScienceAndBiology/output/cln_v_ncp.csv",'w') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['c','cl/n','ncp'])
-    csv_out.writerow([c_cancer,(c_cancer * l_cancer)/n_cancer,n_cancer * c_cancer * p_cancer])
+    for p_cancer in np.arange(0,1,0.1):
+        csv_out.writerow([c_cancer,(c_cancer * l_cancer)/n_cancer,n_cancer * c_cancer * p_cancer])
     for c_sw_idx in range(len(c_sw_list)):
         for l_sw_idx in range(len(c_sw_list[c_sw_idx])):
             c = c_sw_list[c_sw_idx][l_sw_idx][0]
