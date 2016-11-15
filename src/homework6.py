@@ -1,7 +1,9 @@
 # coding=utf-8
 import re
+import csv
 import math
 import random
+import numpy as np
 import networkx as nx
 from collections import deque
 
@@ -44,6 +46,11 @@ def permuted_circle_network(n,c,p):
             k_add = random.randint(0,n)
         print('-/+ edge: {0} -> {1}'.format(j_add,k_add))
         permuted_circle.add_edge(j_add,k_add)
+    return permuted_circle
+
+# degree centrality of list of tuples
+def mean_degree(comp,graph):
+    return sum([graph.degree(node) for node in graph.subgraph(comp).nodes()]) / len(comp)
 
 # return dict of distances from root to leaf
 def bfs(graph,vertex):
@@ -114,7 +121,8 @@ PanCancerGenePairs = [gene_pair for gene_pair in GeneAdjMatrix if gene_pair[0] i
 
 G = nx.Graph()
 for pair in PanCancerGenePairs:
-    G.add_edge(pair[0],pair[1])
+    if pair[0] != pair[1]: # remove self-edges
+        G.add_edge(pair[0],pair[1])
 
 dists = dict()
 
@@ -138,6 +146,7 @@ output.write('Discovered {0} components\n\n'.format(len(comps)))
 for comp in sorted(list(comps),key=len):
     output.write('Unique component of size {0}\n'.format(len(comp)))
     output.write(' diameter {0}\n'.format(diameter(comp,dists)))
+    output.write(' avg degree {0}\n'.format(mean_degree(comp,G)))
     output.write(' avg shortest path {0}\n'.format(avg_s_pth(comp,dists)))
     for element in sorted(list(comp)):
         output.write('\t{0}\n'.format(element))
@@ -148,5 +157,58 @@ circle0 = circle_network(20,6)
 nx.write_graphml(circle0,"/home/burkhart/Software/NetworkScienceAndBiology/output/circle.xml")
 
 pcircle0 = permuted_circle_network(20,6,0.2)
-nx.write_graphml(circle0,"/home/burkhart/Software/NetworkScienceAndBiology/output/pcircle.xml")
+nx.write_graphml(pcircle0,"/home/burkhart/Software/NetworkScienceAndBiology/output/pcircle.xml")
+
+#   n = number of vertices in network
+#   l = average shortest path
+#   c = mean degree of a vertex
+#   p = proportion of edges removed from circle and placed between two ur vertices
+
+# 1. find l, c, n for cancer network (only largest module)
+n_cancer = 76
+l_cancer = 3.512465373961219
+c_cancer = 5.394736842105263
+p_cancer = 0.5 # to position value in center
+
+# 2. generate small-world (sw) models with n_sw == n_cancer, c_sw bounding c_cancer, varying p_sw
+n_sw = n_cancer
+c_sw_list = list() # list with one element for each value of c_sw
+for c_sw in range(5,7):
+    l_sw_list = list() # list with one element for each tuple (l_sw,p_sw)
+    for p_sw in np.arange(0,1,0.1):
+        sw_model = permuted_circle_network(n_sw,c_sw,p_sw)
+        dists = dict()
+        for vertex in sw_model.nodes():
+            dists[vertex] = bfs(sw_model,vertex)
+        comps = components(dists)
+        if len(comps) > 1:
+            print('ERROR: Permuting small-world model with p = {0} cut graph'.format(p_sw))
+        for comp in sorted(list(comps)):
+            l_sw = avg_s_pth(comp,dists)
+            l_sw_list.append((c_sw,l_sw,p_sw))
+    c_sw_list.append(l_sw_list.copy())
+
+# 3. plot l vs p for small-world models & cancer network
+with open("/home/burkhart/Software/NetworkScienceAndBiology/output/l_v_p.csv",'w') as out:
+    csv_out=csv.writer(out)
+    csv_out.writerow(['c','l','p'])
+    csv_out.writerow([c_cancer,l_cancer,p_cancer])
+    for c_sw_idx in range(len(c_sw_list)):
+        for l_sw_idx in range(len(c_sw_list[c_sw_idx])):
+            c = c_sw_list[c_sw_idx][l_sw_idx][0]
+            l = c_sw_list[c_sw_idx][l_sw_idx][1]
+            p = c_sw_list[c_sw_idx][l_sw_idx][2]
+            csv_out.writerow([c,l,p])
+
+# 4. plot cl/n vs ncp for small-world models & cancer network
+with open("/home/burkhart/Software/NetworkScienceAndBiology/output/cln_v_ncp.csv",'w') as out:
+    csv_out=csv.writer(out)
+    csv_out.writerow(['c','cl/n','ncp'])
+    csv_out.writerow([c_cancer,(c_cancer * l_cancer)/n_cancer,n_cancer * c_cancer * p_cancer])
+    for c_sw_idx in range(len(c_sw_list)):
+        for l_sw_idx in range(len(c_sw_list[c_sw_idx])):
+            c = c_sw_list[c_sw_idx][l_sw_idx][0]
+            l = c_sw_list[c_sw_idx][l_sw_idx][1]
+            p = c_sw_list[c_sw_idx][l_sw_idx][2]
+            csv_out.writerow([c,(c * l)/n_sw,n_sw * c * p])
 
